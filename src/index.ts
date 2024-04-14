@@ -26,12 +26,22 @@ const app = new Elysia()
   });
 
 app
-  .group("user", (app) => {
-    return app.post("signin", ({ body }) => body, {
-      body: signinDTO,
-      response: signinDTO,
-    });
-  })
+  .group("user", (app) =>
+    app
+      .post("signin", ({ body }) => body, {
+        body: signinDTO,
+        response: signinDTO,
+      })
+      .get(
+        "/:id",
+        ({ params: { id } }) => {
+          return id;
+        },
+        {
+          params: t.Object({ id: t.Numeric() }),
+        }
+      )
+  )
   .listen(3000);
 
 console.log(
