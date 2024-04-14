@@ -1,10 +1,6 @@
-import { Elysia } from "elysia";
-
-// DEFINE PLUGIN: reusable components
-const plugin = new Elysia()
-  .state("plugin-version", 1)
-  .get("form-plugin", () => "Hi")
-  .get("greet", () => "Welcome every body !");
+import { Elysia, t } from "elysia";
+import { plugin } from "./plugin";
+import { signinDTO } from "./models";
 
 const app = new Elysia()
   .use(plugin)
@@ -27,6 +23,14 @@ const app = new Elysia()
     console.log(store["plugin-version"]);
     set.status = 201;
     return { body };
+  });
+
+app
+  .group("user", (app) => {
+    return app.post("signin", ({ body }) => body, {
+      body: signinDTO,
+      response: signinDTO,
+    });
   })
   .listen(3000);
 
